@@ -1,17 +1,25 @@
-import { MongoClient } from 'mongodb'
+import {username, password} from './password.js';
 
-export async function connect () {
-  // Connection URL
-  const url = 'mongodb://localhost:27017/my_database'
-
-  let db
-
-  try {
-    db = await MongoClient.connect(url)
-    console.log('Connected successfully!')
-  } catch (err) {
-    // Handle error
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = `mongodb+srv://${username}:${password}@cluster0.lhusswa.mongodb.net/?retryWrites=true&w=majority`;
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
   }
-
-  return db
+});
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
 }
+run().catch(console.dir);
