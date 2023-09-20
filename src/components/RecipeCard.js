@@ -6,12 +6,12 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function RecipeCard({ heading, text }) {
+export default function RecipeCard({ title, description, image_url, image_text }) {
   return (
     <Card>
       <Image
-        alt="Random image"
-        src="https://source.unsplash.com/random"
+        alt={image_text}
+        src={image_url}
         width={640}
         height={480}
         style={{
@@ -22,10 +22,10 @@ export default function RecipeCard({ heading, text }) {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {heading}
+          {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {text}
+          {description}
         </Typography>
       </CardContent>
       <CardActions>
