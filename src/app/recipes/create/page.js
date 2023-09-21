@@ -3,9 +3,6 @@
 import {useState} from 'react';
 import {useRouter} from 'next/router';
 
-import {insertRecipe} from '@/api-lib/recipes';
-
-
 export default function CreateRecipe() {
   const router = useRouter();
 
@@ -15,28 +12,26 @@ export default function CreateRecipe() {
     ingredients: '',
     instructions: '',
     headerImage: '',
+    headerImageAltText: '',
   });
 
-  const handleSubmit = async (e) => {
+export default function createRecipe() {
+  async function onSubmit(e) {
     e.preventDefault();
 
-    try {
-      const newRecipe = await insertRecipe(recipe);
-      router.push(`/recipes/${newRecipe._id}`);
-    } catch (error) {
-      console.error(`Error creating recipe: ${error}`);
-    }
-  };
-
-  const handleChange = (e) => {
-    const target = e.target;
-    const name = target.name;
-
-    setRecipe({
-      ...recipe,
-      [name]: target.value,
+    const formData = new FormData(event.target);
+    const response = await fetch('/api/submit', {
+      method: 'POST',
+      body: formData,
     });
   };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input type="text" name="name" />
+      <button type="submit">Submit</button>
+    </form>
+  )
 
   return (
     <div>
@@ -84,6 +79,16 @@ export default function CreateRecipe() {
           <input
             id="headerImage"
             name="headerImage"
+            type="text"
+            value={recipe.headerImage}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="headerImageAltText">Header Image</label>
+          <input
+            id="headerImageAltText"
+            name="headerImageAltText"
             type="text"
             value={recipe.headerImage}
             onChange={handleChange}

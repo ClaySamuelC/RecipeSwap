@@ -1,10 +1,25 @@
-import { clientPromise } from '../db/mongodb.js';
+import clientPromise from '@/db/mongodb.js';
+import { Petemoss } from 'next/font/google';
 
 async function getRecipeCollection() {
   const client = await clientPromise;
   const db = client.db();
   const collection = db.collection("recipes");
   return collection;
+}
+
+export default async function handler(req, res) {
+  const { method } = req;
+
+  const recipes = await getRecipeCollection();
+
+  if (method === 'POST') {
+    try {
+      res.status(201).json({ success: true, data: req.body });
+    } catch (error) {
+      res.status(400).json({ success: false });
+    }
+  }
 }
 
 // CREATE RECIPE
@@ -15,8 +30,8 @@ async function insertRecipe(recipe) {
 
 // READ RECIPE
 async function getRecipes(query={}) {
-  const recipe = await getRecipeCollection().find(query).toArray();
-  return recipe;
+  const recipes = await getRecipeCollection();
+  return recipes.find(query).toArray();
 }
 
 // UPDATE RECIPE
