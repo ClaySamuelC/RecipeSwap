@@ -1,11 +1,8 @@
 "use client";
 
 import {useState} from 'react';
-import {useRouter} from 'next/router';
 
 export default function CreateRecipe() {
-  const router = useRouter();
-
   const [recipe, setRecipe] = useState({
     title: '',
     description: '',
@@ -15,23 +12,24 @@ export default function CreateRecipe() {
     headerImageAltText: '',
   });
 
-export default function createRecipe() {
-  async function onSubmit(e) {
-    e.preventDefault();
-
-    const formData = new FormData(event.target);
-    const response = await fetch('/api/submit', {
-      method: 'POST',
-      body: formData,
+  const handleChange = (e) => {
+    setRecipe({
+      ...recipe,
+      [e.target.name]: e.target.value,
     });
   };
 
-  return (
-    <form onSubmit={onSubmit}>
-      <input type="text" name="name" />
-      <button type="submit">Submit</button>
-    </form>
-  )
+  async function handleSubmit(e) {
+    e.preventDefault();
+    console.log(recipe);
+
+    const response = await fetch('/api/submit', {
+      method: 'POST',
+      body: recipe,
+    });
+
+    console.log(response);
+  };
 
   return (
     <div>

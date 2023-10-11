@@ -1,5 +1,4 @@
 import clientPromise from '@/db/mongodb.js';
-import { Petemoss } from 'next/font/google';
 
 async function getRecipeCollection() {
   const client = await clientPromise;
