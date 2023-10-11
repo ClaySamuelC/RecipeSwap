@@ -7,28 +7,23 @@ if (!process.env.MONGODB_URI) {
 
 const uri = process.env.MONGODB_URI;
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprectationErrors: true,
-  }
-});
+let client;
 
-let clientPromise;
+async function initClient() {
+  client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprectationErrors: true,
+    }
+  });
+  await client.connect()
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((error) => console.error(`Error connecting to DB: ${error}`));
 
-if (process.env.NODE_ENV === 'development') {
-  if (!global._mongoClientPromise) {
-    global._mongoClientPromise = await client.connect()
-      .then(() => {
-        console.log(`MongoDB connection established successfully`);
-      }).catch((error) => {
-        console.error(`MongoDB connection error: ${error}`);
-      });
-  }
-  clientPromise = global._mongoClientPromise;
-} else {
-  clientPromise = client.connect();
+  return client;
 }
 
-export default clientPromise;
+export async function getClient() {
+  return await initClient();
+}

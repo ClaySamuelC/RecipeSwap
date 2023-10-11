@@ -21,14 +21,10 @@ export default function CreateRecipe() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(recipe);
-
     const response = await fetch('/api/submit', {
       method: 'POST',
-      body: recipe,
+      body: JSON.stringify(recipe),
     });
-
-    console.log(response);
   };
 
   return (
