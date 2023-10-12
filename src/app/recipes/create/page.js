@@ -21,7 +21,7 @@ export default function CreateRecipe() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const response = await fetch('/api/submit', {
+    const response = await fetch('/api/recipes', {
       method: 'POST',
       body: JSON.stringify(recipe),
     });

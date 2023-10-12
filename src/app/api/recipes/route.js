@@ -12,6 +12,29 @@ async function init() {
   recipes = db.collection('recipes');
 };
 
+export async function GET() {
+  try {
+    await init();
+
+    const allRecipes = await recipes.find({}).toArray();
+
+    return new NextResponse(
+      {
+        status: 200,
+        body: allRecipes,
+      }
+    )
+  } catch (error) {
+    console.error(`Error in GET request:, ${error}`);
+    return new NextResponse(
+      {
+        status: 500,
+        body: { error: error.message },
+      }
+    )
+  }
+}
+
 export async function POST(request) {
   const recipe = await request.json();
   try {
